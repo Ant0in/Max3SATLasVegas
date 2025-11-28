@@ -10,3 +10,4 @@ if __name__ == "__main__":
     for i, instance in enumerate(benchset.values()):
         bc, _ = LasVegasMAX3SAT.run(instance, maxit=1000)
         print(f'[i] Instance {i}: Best clause count = {bc} [proportion = {bc / instance.formula.size():.4f}]')
+
