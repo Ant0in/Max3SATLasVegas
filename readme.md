@@ -18,7 +18,7 @@ This Python project provides:
 
 - A **Max 3-SAT solver** based on a **randomized Las Vegas algorithm**.
 - A full implementation of **literals, clauses, and Boolean assignments** for 3-CNF formulas.
-- Methods to **evaluate**, **optimize**, and **search** for assignments that maximize the number of satisfied clauses.
+- Methods to **evaluate**, **optimize**, and **search** for assignments that guarantees the number of satisfied clauses is at least `7m/8`.
 
 For more detailed problem specifications and additional information, please refer to the project specification [**`doc/SatisfactionAssignment-1.pdf`**](doc/SatisfactionAssignment-1.pdf) or to the report.
 
@@ -47,7 +47,7 @@ Both modes accept optional parameters such as the maximum number of iterations a
 To run the solver on a single CNF file:
 
 ```bash
-python main.py --file res/example.cnf --iteration 2000 --verbose
+python main.py --file res/example.cnf --verbose
 ```
 
 This loads the instance, applies the Las Vegas MAX-3SAT algorithm, and prints:
@@ -61,7 +61,7 @@ This loads the instance, applies the Las Vegas MAX-3SAT algorithm, and prints:
 To automatically process every `.cnf` file inside a folder:
 
 ```bash
-python main.py --dir res/ --iteration 2000
+python main.py --dir res/
 ```
 
 The solver iterates over all matching files and reports the best result for each.
@@ -99,7 +99,6 @@ Any `.cnf` file placed in the `res/` directory following this structure will be 
 ## 📊 Benchmarks
 
 Standard **MAX-3SAT benchmark instances** can be found at the **SATLIB** repository: https://www.cs.ubc.ca/~hoos/SATLIB/benchm.html
-
 
 ## 📄 License
 

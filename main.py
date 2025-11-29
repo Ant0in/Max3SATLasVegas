@@ -1,5 +1,6 @@
 
 from src import LasVegasMAX3SAT, Max3SAT, SATBenchFactory
+from typing import Dict, Tuple, List
 import argparse
 
 
@@ -17,19 +18,16 @@ class Main:
 
         parser: argparse.ArgumentParser = argparse.ArgumentParser(description="Run Las Vegas MAX-3SAT on a single .cnf file or on all .cnf files in a directory.")
         
-        # either --file or --dir must be provided, but not both
+        # either --file or --dir must be provided, but not both + verbose flag
         group: argparse._MutuallyExclusiveGroup = parser.add_mutually_exclusive_group(required=True)
         group.add_argument("--file", type=str, help="Path to a single .cnf file.")
         group.add_argument("--dir", type=str, help="Path to a directory containing .cnf files.")
-
-        # additional parameters
-        parser.add_argument("--iteration", type=int, default=1000, help="Maximum iterations for the Las Vegas algorithm.")
         parser.add_argument('--verbose', action='store_true', help='Enable verbose output.')
 
         return parser.parse_args()
 
     @staticmethod
-    def single(fp: str, maxit: int, verbose: bool) -> None:
+    def single(fp: str, verbose: bool) -> None:
 
         """
         Run Las Vegas MAX-3SAT on a single .cnf file.
@@ -40,41 +38,38 @@ class Main:
         if verbose:
             print(f'[i] Loaded instance from {fp} with {instance.formula.size()} clauses.')
 
-        bc, ba = LasVegasMAX3SAT.run(instance, maxit=maxit)
+        c, a = LasVegasMAX3SAT.run(instance)
 
-        print(f'[r] Best clause count = {bc} [proportion = {bc / instance.formula.size():.4f}]')
+        print(f'[r] Maximal clause count = {c} [proportion = {c / instance.formula.size():.4f}]')
         if verbose:
             print(f'[r] Best assignment found:')
             # sort variables for consistent output
-            for var in sorted(ba.keys()):
-                val = ba[var]
+            for var in sorted(a.keys()):
+                val = a[var]
                 print(f'>> [x_{var}] {val}')
         
     @staticmethod
-    def batch(dir_path: str, maxit: int, verbose: bool) -> None:
+    def batch(dir_path: str, verbose: bool) -> None:
 
         """
         Run Las Vegas MAX-3SAT on all .cnf files in a directory.
         """
 
-        benchset: dict[str, Max3SAT] = SATBenchFactory.from_dir(dir_path, ext='.cnf')
-        
-        if verbose:
-            print(f'[i] Loaded {len(benchset)} problem instances from {dir_path}.')
+        factory: SATBenchFactory = SATBenchFactory()
+        instances: Dict[str, Max3SAT] = factory.from_dir(dir_path)
 
-        for i, (name, instance) in enumerate(benchset.items()):
-            
+        for name, instance in instances.items():
             if verbose:
-                print(f'\n[i] Processing instance {i+1}/{len(benchset)}: {name} with {instance.formula.size()} clauses.')
+                print(f'[i] Loaded instance {name} with {instance.formula.size()} clauses.')
 
-            bc, ba = LasVegasMAX3SAT.run(instance, maxit=maxit)
+            c, a = LasVegasMAX3SAT.run(instance)
 
-            print(f'[r] Instance: {name} | Best clause count = {bc} [proportion = {bc / instance.formula.size():.4f}]')
+            print(f'[r] Instance: {name} | Maximal clause count = {c} [proportion = {c / instance.formula.size():.4f}]')
             if verbose:
                 print(f'[r] Best assignment found:')
                 # sort variables for consistent output
-                for var in sorted(ba.keys()):
-                    val = ba[var]
+                for var in sorted(a.keys()):
+                    val = a[var]
                     print(f'>> [x_{var}] {val}')
 
 
@@ -87,7 +82,6 @@ if __name__ == "__main__":
     args: argparse.Namespace = Main.parse_args()
 
     if args.file:
-        Main.single(fp=args.file, maxit=args.iteration, verbose=args.verbose)
+        Main.single(fp=args.file, verbose=args.verbose)
     elif args.dir:
-        Main.batch(dir_path=args.dir, maxit=args.iteration, verbose=args.verbose)
-
+        Main.batch(dir_path=args.dir, verbose=args.verbose)
