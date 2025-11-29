@@ -20,7 +20,7 @@ This Python project provides:
 - A full implementation of **literals, clauses, and Boolean assignments** for 3-CNF formulas.
 - Methods to **evaluate**, **optimize**, and **search** for assignments that guarantees the number of satisfied clauses is at least `7m/8`.
 
-For more detailed problem specifications and additional information, please refer to the project specification [**`doc/SatisfactionAssignment-1.pdf`**](doc/SatisfactionAssignment-1.pdf) or to the report.
+For more detailed problem specifications and additional information, please refer to the project specification [**`doc/SatisfactionAssignment-1.pdf`**](doc/SatisfactionAssignment-1.pdf) or to the report [**`doc/infof413_assignment_2.pdf`**](doc/infof413_assignment_2.pdf)
 
 ## ⚙️ Installation
 
