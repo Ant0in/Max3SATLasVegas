@@ -1,6 +1,6 @@
 
 from src import LasVegasMAX3SAT, Max3SAT, SATBenchFactory
-from typing import Dict, Tuple, List
+from typing import Dict
 import argparse
 
 
@@ -38,9 +38,9 @@ class Main:
         if verbose:
             print(f'[i] Loaded instance from {fp} with {instance.formula.size()} clauses.')
 
-        c, a = LasVegasMAX3SAT.run(instance)
+        c, a, i = LasVegasMAX3SAT.run(instance)
 
-        print(f'[r] Maximal clause count = {c} [proportion = {c / instance.formula.size():.4f}]')
+        print(f'[r] [{i} it] Maximal clause count = {c} [proportion = {c / instance.formula.size():.4f}]')
         if verbose:
             print(f'[r] Best assignment found:')
             # sort variables for consistent output
@@ -62,9 +62,9 @@ class Main:
             if verbose:
                 print(f'[i] Loaded instance {name} with {instance.formula.size()} clauses.')
 
-            c, a = LasVegasMAX3SAT.run(instance)
+            c, a, i = LasVegasMAX3SAT.run(instance)
 
-            print(f'[r] Instance: {name} | Maximal clause count = {c} [proportion = {c / instance.formula.size():.4f}]')
+            print(f'[r] [{i} it] Instance: {name} | Maximal clause count = {c} [proportion = {c / instance.formula.size():.4f}]')
             if verbose:
                 print(f'[r] Best assignment found:')
                 # sort variables for consistent output

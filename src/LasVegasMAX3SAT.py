@@ -170,23 +170,25 @@ class LasVegasMAX3SAT:
         return assignment
 
     @staticmethod
-    def run(max3sat: Max3SAT) -> Tuple[int, assignment_t]:
+    def run(max3sat: Max3SAT) -> Tuple[int, assignment_t, int]:
 
         """
         Run the Las Vegas algorithm to find an assignment that maximizes at least 7/8 of the clauses and
-        yield the number of satisfied clauses along with the corresponding assignment.
+        yield the number of satisfied clauses along with the corresponding assignment, and the number of iterations taken.
         """
 
+        it: int = 0
         literals: List[Literal] = list(max3sat.all_literals())
         
         # repeat until a satisfactory assignment is found
         while True:
-            
+
             assignment: assignment_t = LasVegasMAX3SAT.random_assignment(literals)
             satisfied_clauses: int = max3sat.count_satisfied_clauses(assignment)
+            it += 1
 
             # uses the karloff-zwick bound of 7/8
             if satisfied_clauses >= (7 / 8) * max3sat.formula.size():
-                return satisfied_clauses, assignment
+                return satisfied_clauses, assignment, it
         
 
